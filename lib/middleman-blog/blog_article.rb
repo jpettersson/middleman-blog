@@ -145,7 +145,9 @@ module Middleman
       # The "slug" of the article that shows up in its URL.
       # @return [String]
       def slug
-        @_slug ||= path_part("title")
+        # If directory_indexes is activated the resource URL should not contain an .html extension. 
+        # This modification checks for an activated directory_index and removes the .html extension from the url's.
+        @_slug ||= path_part("title").tap{|s| s.gsub!('.html', '') if app.class.extensions.collect{|e| e.to_s }.include?("Middleman::Extensions::DirectoryIndexes")}
       end
 
       # The previous (chronologically earlier) article before this one
